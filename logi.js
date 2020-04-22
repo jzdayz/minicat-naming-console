@@ -21,8 +21,8 @@ function fillService(sequence) {
 
     for (let i = 0; i < sequence.length; i++) {
         var row = "<tr class=\"table-success\">"
-        row += "<td onclick=jump('"+sequence[i].serviceName+"')>" + sequence[i].str1 + "</td>"
-        row += "<td onclick=jump('"+sequence[i].serviceName+"')>" + sequence[i].str2 + "</td>"
+        row += "<td onclick=jump('"+sequence[i].name+"')>" + sequence[i].name + "</td>"
+        row += "<td onclick=jump('"+sequence[i].name+"')>" + Object.keys(sequence[i].instances).length + "</td>"
         row += "</tr>"
         res += row
     }
@@ -80,19 +80,21 @@ function changeTbody(serviceName){
     tobody.innerHTML = tbody
 }
 
-tobody.innerHTML = fillService(data)
+
 
 const html = document.querySelector("body")
 
-get("http://httpbin.org/get")
 
-function get(url){
-    fetch(url).then(function (response) {
+
+
+function get(url,jsonHandler){
+    return fetch(url).then(function (response) {
         if (response.ok) {
             response.json().then(function (json) {
-                let jsonStr = JSON.stringify(json, null, 2)
-                html.append(jsonStr)
-            });
+                return json;
+                // let jsonStr = JSON.stringify(json, null, 2)
+                // html.append(jsonStr)
+            }).then(jsonHandler)
         }
     });
 }
@@ -121,4 +123,10 @@ function gohead(){
         changeTheadBool = false
     }
 }
+
+// 请求后端数据
+get("http://localhost:20202/list",function (json) {
+    tobody.innerHTML = fillService(json.body)
+})
+
 
