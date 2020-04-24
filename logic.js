@@ -24,6 +24,7 @@ function fillService(sequence) {
 
 function fillInstance(sequence) {
 
+    console.log(sequence)
     let res = "";
     for (const instance in sequence) {
         let row = "<tr class=\"table-success\">";
@@ -47,9 +48,9 @@ function jump(serviceName){
 function changeTbody(serviceName){
     get(host+"list?serviceName="+serviceName,function(json){
         console.log(JSON.stringify(json.body,null,2))
-        const tbody = fillInstance(json.body.instances);
+        const tbodyHtml = fillInstance(json.body.instances);
         beforeTbody = tbody.innerHTML
-        tbody.innerHTML = tbody
+        tbody.innerHTML = tbodyHtml
     })
 }
 
